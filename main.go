@@ -10,6 +10,7 @@ import (
 	"text/template"
 
 	"github.com/te6lim/chat-web-socket/trace"
+	"github.com/te6lim/chat-web-socket/auth"
 )
 
 type templateHandler struct {
@@ -30,7 +31,9 @@ func main() {
 	flag.Parse()
 	r :=  newRoom()
 	r.tracer = trace.New(os.Stdout)
-	http.Handle("/", &templateHandler{fileName: "chat.html"})
+	http.Handle("/chat", auth.MustAuth(&templateHandler{fileName: "chat.html"}))
+	http.Handle("/login", &templateHandler{fileName: "login.html"})
+	http.HandleFunc("/auth/", auth.LoginHandler)
 	http.Handle("/room", r)
 	go r.run()
 	log.Println("Starting web server on ", *addr)

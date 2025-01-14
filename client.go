@@ -78,7 +78,7 @@ func (r *room) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		log.Fatal("ServeHttp:", err)
 		return
 	}
-	client := &client{
+	client := &client {
 		socket: socket,
 		send:   make(chan []byte, messageBufferSize),
 		room:   r,
